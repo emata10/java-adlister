@@ -1,37 +1,29 @@
 package profile;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet(name = "GuessServlet", urlPatterns = "/pickcolor")
-public class GuessServlet extends HttpServlet {
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher view = request.getRequestDispatcher("guess.jsp");
-        view.forward(request, response);
+@WebServlet(name = "GuessingGameServlet", urlPatterns = "/guess")
+class GuessingGameServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("/WEB-INF/guess.jsp").forward(req, resp);
     }
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int guess = Integer.parseInt(request.getParameter("guess"));
 
-        if (guess >= 1 && guess <= 3) {
-            if (guess == generateRandomNumber()) {
-                response.sendRedirect("correct");
-            } else {
-                response.sendRedirect("incorrect");
-            }
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int guess = Integer.parseInt(req.getParameter("guess"));
+        int randomNumber = (int) Math.floor(Math.random() * 3) + 1;
+        if (guess > 3 || guess < 1) {
+            resp.sendRedirect("/guess");
+        } else if (guess == randomNumber) {
+            resp.sendRedirect("/correct");
         } else {
-            response.sendRedirect("guess");
+            resp.sendRedirect("/incorrect");
         }
     }
-
-    private int generateRandomNumber() {
-        return (int) (Math.random() * 3) + 1;
-
-    }
-    }
-
+}

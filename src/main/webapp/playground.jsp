@@ -17,7 +17,7 @@
     <% name = "Bill"; %>
     <% request.setAttribute("name", "Gregory"); %>
     <h1>Hello, ${name}!</h1>
-    <jsp:include page="partials/howdy.jsp"/>
+    <jsp:include page="WEB-INF/partials/howdy.jsp"/>
     <% request.setAttribute("writingCode", true); %>
 <c:choose>
     <c:when test="${writingCode}">
